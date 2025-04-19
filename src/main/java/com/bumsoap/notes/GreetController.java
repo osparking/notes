@@ -9,4 +9,9 @@ public class GreetController {
     public String greet() {
         return "안녕하세요";
     }
+
+    @GetMapping("/goodbye")
+    public String goodbye() {
+        return "잘가세요";
+    }
 }
