@@ -14,4 +14,9 @@ public class GreetController {
     public String goodbye() {
         return "잘가세요";
     }
+
+    @GetMapping("/contact")
+    public String contact() {
+        return "연락처";
+    }
 }
