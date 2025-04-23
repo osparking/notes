@@ -20,4 +20,13 @@ public class NoteServiceImpl implements NoteService {
         return saved;
     }
 
+    @Override
+    public Note updateFor(Long noteId, String content, String username) {
+        Note note = noteRepo.findById(noteId).orElseThrow(
+                () -> new RuntimeException("노트 찾기 실패"));
+        note.setContent(content);
+        Note updated = noteRepo.save(note);
+        return updated;
+    }
+
 }
