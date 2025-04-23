@@ -29,4 +29,9 @@ public class NoteServiceImpl implements NoteService {
         return updated;
     }
 
+    @Override
+    public void deleteFor(Long noteId) {
+        noteRepo.deleteById(noteId);
+    }
+
 }
