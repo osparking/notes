@@ -29,4 +29,12 @@ public class NoteCotroller {
         System.out.println("유저 상세:" + username);
         return noteService.getNotesFor(username);
     }
+
+    @PutMapping("/{noteId}")
+    public Note updateNote(@PathVariable Long noteId,
+                           @RequestBody String newNote,
+                           @AuthenticationPrincipal UserDetails details) {
+        String username = details.getUsername();
+        return noteService.updateFor(noteId, newNote, username);
+    }
 }
