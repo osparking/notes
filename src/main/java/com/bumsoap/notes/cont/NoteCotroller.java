@@ -5,10 +5,9 @@ import com.bumsoap.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -22,5 +21,12 @@ public class NoteCotroller {
         String username = userDetails.getUsername();
         System.out.println("유저 상세:" + username);
         return noteService.createFor(username, content);
+    }
+
+    @GetMapping
+    public List<Note> getNotesOf(@AuthenticationPrincipal UserDetails details) {
+        String username = details.getUsername();
+        System.out.println("유저 상세:" + username);
+        return noteService.getNotesFor(username);
     }
 }
