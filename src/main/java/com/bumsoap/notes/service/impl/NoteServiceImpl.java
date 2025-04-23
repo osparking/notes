@@ -6,6 +6,8 @@ import com.bumsoap.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteServiceImpl implements NoteService {
     @Autowired
@@ -32,6 +34,12 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteFor(Long noteId) {
         noteRepo.deleteById(noteId);
+    }
+
+    @Override
+    public List<Note> getNotesFor(String username) {
+        List<Note> userNotes = noteRepo.findByOwnerUsername(username);
+        return userNotes;
     }
 
 }
