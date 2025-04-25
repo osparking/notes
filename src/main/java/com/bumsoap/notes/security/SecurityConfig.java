@@ -28,24 +28,4 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource source) {
-        var manager = new JdbcUserDetailsManager(source);
-
-        if (!manager.userExists("user1")) {
-            manager.createUser(User
-                    .withUsername("user1")
-                    .password("{noop}1234")
-                    .roles("USER")
-                    .build());
-        }
-        if (!manager.userExists("admin")) {
-            manager.createUser(User
-                    .withUsername("admin")
-                    .password("{noop}1234")
-                    .roles("ADMIN")
-                    .build());
-        }
-        return manager;
-    }
 }
