@@ -1,0 +1,64 @@
+package com.bumsoap.notes.data;
+
+import com.bumsoap.notes.models.AppRole;
+import com.bumsoap.notes.models.Role;
+import com.bumsoap.notes.models.User;
+import com.bumsoap.notes.repo.RoleRepo;
+import com.bumsoap.notes.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+
+@Component
+@RequiredArgsConstructor
+public class InitialUserCreator implements ApplicationListener<ApplicationReadyEvent> {
+    private final RoleRepo roleRepo;
+    private final UserRepo userRepo;
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        createAdmin();
+        createUser1();
+    }
+
+private void createAdmin() {
+    Role adminRole = roleRepo.findByRoleName(AppRole.ROLE_ADMIN)
+            .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_ADMIN)));
+
+    if (!userRepo.existsByUsername("admin")) {
+        User admin = new User("admin", "admin@email.com", "{noop}1234");
+        admin.setAccountNonLocked(true);
+        admin.setAccountNonExpired(true);
+        admin.setCredentialsNonExpired(true);
+        admin.setEnabled(true);
+        admin.setCredentialsExpiration(LocalDate.now().plusYears(1));
+        admin.setAccountExpiration(LocalDate.now().plusYears(1));
+        admin.setTwoFactorEnabled(false);
+        admin.setSignUpMethod("email");
+        admin.setRole(adminRole);
+        userRepo.save(admin);
+    }
+}
+
+    private void createUser1() {
+        Role userRole = roleRepo.findByRoleName(AppRole.ROLE_USER)
+                .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_USER)));
+
+        if (!userRepo.existsByUsername("user1")) {
+            User user1 = new User("user1", "user1@email.com", "{noop}1234");
+            user1.setAccountNonLocked(false);
+            user1.setAccountNonExpired(true);
+            user1.setCredentialsNonExpired(true);
+            user1.setEnabled(true);
+            user1.setCredentialsExpiration(LocalDate.now().plusYears(1));
+            user1.setAccountExpiration(LocalDate.now().plusYears(1));
+            user1.setTwoFactorEnabled(false);
+            user1.setSignUpMethod("email");
+            user1.setRole(userRole);
+            userRepo.save(user1);
+        }
+    }
+}
