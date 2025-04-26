@@ -13,18 +13,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     @Autowired
     UserService userService;
 
     @GetMapping("/getusers")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(),
                 HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserById(id),
                 HttpStatus.OK);
