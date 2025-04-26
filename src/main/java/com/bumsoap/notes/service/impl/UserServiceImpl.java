@@ -1,0 +1,65 @@
+package com.bumsoap.notes.service.impl;
+
+import com.bumsoap.notes.dtos.UserDto;
+import com.bumsoap.notes.models.AppRole;
+import com.bumsoap.notes.models.Role;
+import com.bumsoap.notes.models.User;
+import com.bumsoap.notes.repo.RoleRepo;
+import com.bumsoap.notes.repo.UserRepo;
+import com.bumsoap.notes.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class UserServiceImpl implements UserService {
+    private final UserRepo userRepo;
+    private final RoleRepo roleRepo;
+
+    @Override
+    public void updateUserRole(Long userId, String roleName) {
+        User user = userRepo.findById(userId).orElseThrow(
+                () -> new RuntimeException("유저 발견 실패"));
+        AppRole appRole = AppRole.valueOf(roleName);
+        Role role = roleRepo.findByRoleName(appRole).orElseThrow(
+                () -> new RuntimeException("롤 발견 실패"));
+        user.setRole(role);
+        userRepo.save(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        User user = userRepo.findById(id).orElseThrow();
+        return convertToDto(user);
+    }
+
+    private UserDto convertToDto(User user) {
+        return new UserDto(
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.isAccountNonLocked(),
+                user.isAccountNonExpired(),
+                user.isCredentialsNonExpired(),
+                user.isEnabled(),
+
+                user.getCredentialsExpiration(),
+                user.getAccountExpiration(),
+
+                user.getTwoFactorSecret(),
+                user.isTwoFactorEnabled(),
+                user.getSignUpMethod(),
+
+                user.getRole(),
+                user.getCreatedDate(),
+                user.getLastModifiedDate()
+        );
+    }
+}
