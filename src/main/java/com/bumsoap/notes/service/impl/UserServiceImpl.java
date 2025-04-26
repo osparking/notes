@@ -8,12 +8,14 @@ import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
 import com.bumsoap.notes.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
