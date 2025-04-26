@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -64,10 +65,10 @@ public class User {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    private LocalDate lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public User(String username, String email, String password) {
         this.username = username;
