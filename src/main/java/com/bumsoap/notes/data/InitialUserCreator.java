@@ -8,6 +8,7 @@ import com.bumsoap.notes.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 public class InitialUserCreator implements ApplicationListener<ApplicationReadyEvent> {
     private final RoleRepo roleRepo;
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -29,7 +31,7 @@ private void createAdmin() {
             .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_ADMIN)));
 
     if (!userRepo.existsByUsername("admin")) {
-        User admin = new User("admin", "admin@email.com", "{noop}1234");
+        User admin = new User("admin", "admin@email.com", passwordEncoder.encode("1234"));
         admin.setAccountNonLocked(true);
         admin.setAccountNonExpired(true);
         admin.setCredentialsNonExpired(true);
@@ -48,7 +50,7 @@ private void createAdmin() {
                 .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_USER)));
 
         if (!userRepo.existsByUsername("user1")) {
-            User user1 = new User("user1", "user1@email.com", "{noop}1234");
+            User user1 = new User("user1", "user1@email.com", passwordEncoder.encode("1234"));
             user1.setAccountNonLocked(false);
             user1.setAccountNonExpired(true);
             user1.setCredentialsNonExpired(true);
