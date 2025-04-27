@@ -7,12 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     UserDto updateUserRole(Long userId, String roleName);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     List<User> getAllUsers();
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') OR #loginId == #userId")
+//    @PreAuthorize("hasRole('ROLE_ADMIN') OR #loginId == #userId")
     UserDto getUserById(Long loginId, Long userId);
 }
