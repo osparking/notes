@@ -15,20 +15,19 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
 
     @Override
-    public void updateUserRole(Long userId, String roleName) {
+    public UserDto updateUserRole(Long userId, String roleName) {
         User user = userRepo.findById(userId).orElseThrow(
                 () -> new RuntimeException("유저 발견 실패"));
         AppRole appRole = AppRole.valueOf(roleName);
         Role role = roleRepo.findByRoleName(appRole).orElseThrow(
                 () -> new RuntimeException("롤 발견 실패"));
         user.setRole(role);
-        userRepo.save(user);
+        return convertToDto(userRepo.save(user));
     }
 
     @Override
@@ -37,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Long id) {
-        User user = userRepo.findById(id).orElseThrow();
+    public UserDto getUserById(Long loginId, Long userId) {
+        User user = userRepo.findById(userId).orElseThrow();
         return convertToDto(user);
     }
 
