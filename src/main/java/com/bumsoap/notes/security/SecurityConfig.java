@@ -16,6 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -39,8 +40,10 @@ public class SecurityConfig {
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated());
         http.csrf(AbstractHttpConfigurer::disable);
-        http.addFilterBefore(customLoggingFilter,
-            UsernamePasswordAuthenticationFilter.class);
+http.addFilterBefore(customLoggingFilter,
+    UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
+http.addFilterAfter(new RequestValidationFilter(),
+    CustomLoggingFilter.class);
         http.httpBasic(withDefaults());
         return http.build();
     }
