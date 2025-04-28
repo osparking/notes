@@ -41,6 +41,7 @@ public class SecurityConfig {
 //            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
 //        http.addFilterAfter(new RequestValidationFilter(),
 //            CustomLoggingFilter.class);
+        http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
         return http.build();
     }
