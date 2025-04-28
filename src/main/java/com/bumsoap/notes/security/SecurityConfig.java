@@ -29,9 +29,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
         securedEnabled = true,
         jsr250Enabled = true)
 public class SecurityConfig {
-    @Autowired
-    private CustomLoggingFilter customLoggingFilter;
-
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
             throws Exception {
@@ -40,10 +37,10 @@ public class SecurityConfig {
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated());
         http.csrf(AbstractHttpConfigurer::disable);
-http.addFilterBefore(customLoggingFilter,
-    UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
-http.addFilterAfter(new RequestValidationFilter(),
-    CustomLoggingFilter.class);
+//        http.addFilterBefore(customLoggingFilter,
+//            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
+//        http.addFilterAfter(new RequestValidationFilter(),
+//            CustomLoggingFilter.class);
         http.httpBasic(withDefaults());
         return http.build();
     }
