@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated());
-        http.csrf(AbstractHttpConfigurer::disable);
+//        http.csrf(AbstractHttpConfigurer::disable);
 //        http.addFilterBefore(customLoggingFilter,
 //            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
 //        http.addFilterAfter(new RequestValidationFilter(),
