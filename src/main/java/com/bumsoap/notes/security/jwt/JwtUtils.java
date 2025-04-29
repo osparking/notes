@@ -1,4 +1,4 @@
-package com.bumsoap.notes.security;
+package com.bumsoap.notes.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
