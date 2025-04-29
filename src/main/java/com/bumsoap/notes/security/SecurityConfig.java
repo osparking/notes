@@ -17,6 +17,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.sql.DataSource;
 
@@ -36,6 +37,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated());
+        http.csrf(csrf -> csrf.csrfTokenRepository(
+            CookieCsrfTokenRepository.withHttpOnlyFalse()));
 //        http.csrf(AbstractHttpConfigurer::disable);
 //        http.addFilterBefore(customLoggingFilter,
 //            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
