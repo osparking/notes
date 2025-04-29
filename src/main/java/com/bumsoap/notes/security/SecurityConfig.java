@@ -39,8 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated());
         http.csrf(csrf -> csrf.csrfTokenRepository(
-                CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .ignoringRequestMatchers("/api/auth/public/**"));
+                CookieCsrfTokenRepository.withHttpOnlyFalse()));
 //        http.csrf(AbstractHttpConfigurer::disable);
 //        http.addFilterBefore(customLoggingFilter,
 //            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
