@@ -8,59 +8,66 @@ import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
 import com.bumsoap.notes.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepo userRepo;
-    private final RoleRepo roleRepo;
+  private final UserRepo userRepo;
+  private final RoleRepo roleRepo;
 
-    @Override
-    public UserDto updateUserRole(Long userId, String roleName) {
-        User user = userRepo.findById(userId).orElseThrow(
-                () -> new RuntimeException("유저 발견 실패"));
-        AppRole appRole = AppRole.valueOf(roleName);
-        Role role = roleRepo.findByRoleName(appRole).orElseThrow(
-                () -> new RuntimeException("롤 발견 실패"));
-        user.setRole(role);
-        return convertToDto(userRepo.save(user));
-    }
+  @Override
+  public User findByUsername(String username) {
+    Optional<User> user = userRepo.findByUserName(username);
+    return user.orElseThrow(() -> new RuntimeException(
+        "User not found with username: " + username));
+  }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
-    }
+  @Override
+  public UserDto updateUserRole(Long userId, String roleName) {
+    User user = userRepo.findById(userId).orElseThrow(
+        () -> new RuntimeException("유저 발견 실패"));
+    AppRole appRole = AppRole.valueOf(roleName);
+    Role role = roleRepo.findByRoleName(appRole).orElseThrow(
+        () -> new RuntimeException("롤 발견 실패"));
+    user.setRole(role);
+    return convertToDto(userRepo.save(user));
+  }
 
-    @Override
-    public UserDto getUserById(Long loginId, Long userId) {
-        User user = userRepo.findById(userId).orElseThrow();
-        return convertToDto(user);
-    }
+  @Override
+  public List<User> getAllUsers() {
+    return userRepo.findAll();
+  }
 
-    private UserDto convertToDto(User user) {
-        return new UserDto(
-                user.getUserId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.isAccountNonLocked(),
-                user.isAccountNonExpired(),
-                user.isCredentialsNonExpired(),
-                user.isEnabled(),
+  @Override
+  public UserDto getUserById(Long loginId, Long userId) {
+    User user = userRepo.findById(userId).orElseThrow();
+    return convertToDto(user);
+  }
 
-                user.getCredentialsExpiration(),
-                user.getAccountExpiration(),
+  private UserDto convertToDto(User user) {
+    return new UserDto(
+        user.getUserId(),
+        user.getUsername(),
+        user.getEmail(),
+        user.isAccountNonLocked(),
+        user.isAccountNonExpired(),
+        user.isCredentialsNonExpired(),
+        user.isEnabled(),
 
-                user.getTwoFactorSecret(),
-                user.isTwoFactorEnabled(),
-                user.getSignUpMethod(),
+        user.getCredentialsExpiration(),
+        user.getAccountExpiration(),
 
-                user.getRole(),
-                user.getCreatedDate(),
-                user.getLastModifiedDate()
-        );
-    }
+        user.getTwoFactorSecret(),
+        user.isTwoFactorEnabled(),
+        user.getSignUpMethod(),
+
+        user.getRole(),
+        user.getCreatedDate(),
+        user.getLastModifiedDate()
+    );
+  }
 }
