@@ -7,7 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+  User findByUsername(String username);
+
+  //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     UserDto updateUserRole(Long userId, String roleName);
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
