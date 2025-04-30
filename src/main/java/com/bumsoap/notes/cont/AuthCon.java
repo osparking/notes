@@ -81,7 +81,7 @@ public class AuthCon {
 
   @PostMapping("/public/signup")
   public ResponseEntity<?> registerUser(
-      @Valid @RequestBody SignUpRequest signUpRequest) {
+      @RequestBody SignUpRequest signUpRequest) {
     if (userRepo.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(
           new MessageResponse("Error: Username is already taken!"));
