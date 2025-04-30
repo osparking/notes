@@ -52,6 +52,11 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
             .ignoringRequestMatchers("/api/auth/public/**"));
+        http.exceptionHandling(exception ->
+            exception.authenticationEntryPoint(unauthorizedHandler));
+        http.addFilterBefore(authenticationJwtTokenFilter(),
+            UsernamePasswordAuthenticationFilter.class);
+
 //        http.csrf(AbstractHttpConfigurer::disable);
 //        http.addFilterBefore(customLoggingFilter,
 //            UsernamePasswordAuthenticationFilter.class); // BasicAuthenticationFilter.class);
