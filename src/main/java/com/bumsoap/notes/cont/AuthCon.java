@@ -16,7 +16,9 @@ import com.bumsoap.notes.requests.LoginRequest;
 import com.bumsoap.notes.requests.SignUpRequest;
 import com.bumsoap.notes.responses.LoginResponse;
 import com.bumsoap.notes.responses.MessageResponse;
+import com.bumsoap.notes.responses.UserInfoResponse;
 import com.bumsoap.notes.security.jwt.JwtUtils;
+import com.bumsoap.notes.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,13 +27,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,6 +43,32 @@ public class AuthCon {
   private final UserRepo userRepo;
   private final PasswordEncoder encoder;
   private final RoleRepo roleRepo;
+  private final UserService userService;
+
+  @GetMapping("/user")
+  public ResponseEntity<?> getUserDetails(
+      @AuthenticationPrincipal UserDetails userDetails) {
+    User user = userService.findByUsername(userDetails.getUsername());
+    List<String> roles = userDetails.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .collect(Collectors.toList());
+
+    UserInfoResponse response = new UserInfoResponse(
+        user.getUserId(),
+        user.getUsername(),
+        user.getEmail(),
+        user.isAccountNonLocked(),
+        user.isAccountNonExpired(),
+        user.isCredentialsNonExpired(),
+        user.isEnabled(),
+        user.getCredentialsExpiration(),
+        user.getAccountExpiration(),
+        user.isTwoFactorEnabled(),
+        roles
+    );
+
+    return ResponseEntity.ok().body(response);
+  }
 
   @PostMapping("/public/signin")
   public ResponseEntity<?> authenticateUser(
