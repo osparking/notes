@@ -45,6 +45,13 @@ public class AuthCon {
   private final RoleRepo roleRepo;
   private final UserService userService;
 
+@GetMapping("/username")
+public ResponseEntity<String> getUsername(
+    @AuthenticationPrincipal UserDetails userDetails) {
+  var name = userDetails == null ? "" : userDetails.getUsername();
+  return ResponseEntity.ok().body(name);
+}
+
   @GetMapping("/user")
   public ResponseEntity<?> getUserDetails(
       @AuthenticationPrincipal UserDetails userDetails) {
