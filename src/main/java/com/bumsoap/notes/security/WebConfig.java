@@ -11,14 +11,28 @@ public class WebConfig {
   @Value("${frontend.url}")
   private String frontendUrl;
 
-//  @Bean
+  @Bean
   public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/api/notes/**")
             .allowedOrigins(frontendUrl)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
+
+        registry.addMapping("/api/other/**")
+            .allowedOrigins(frontendUrl)
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
+
+        registry.addMapping("/api/auth/**")
+            .allowedOrigins(frontendUrl)
+            .allowedMethods("POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true)
             .maxAge(3600);
