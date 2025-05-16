@@ -11,7 +11,7 @@ public class WebConfig {
   @Value("${frontend.url}")
   private String frontendUrl;
 
-  @Bean
+//  @Bean
   public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
       @Override
