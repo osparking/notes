@@ -16,11 +16,11 @@ public class NoteCotroller {
     private NoteService noteService;
 
     @PostMapping
-    public Note createNote(@RequestBody String content,
+    public Note createNote(@RequestBody Note content,
                            @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         System.out.println("유저 상세:" + username);
-        return noteService.createFor(username, content);
+        return noteService.createFor(username, content.getContent());
     }
 
     @GetMapping
