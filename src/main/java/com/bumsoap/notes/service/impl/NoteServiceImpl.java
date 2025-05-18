@@ -31,12 +31,17 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteRepo.findById(noteId).orElseThrow(
                 () -> new RuntimeException("노트 찾기 실패"));
         note.setContent(content);
+        noteAudit.logUpdate(username, note);
         return noteRepo.save(note);
     }
 
     @Override
     public void deleteFor(Long noteId) {
-        noteRepo.deleteById(noteId);
+        Note note = noteRepo.findById(noteId).orElseThrow(
+            () -> new RuntimeException("존재하지 않는 노트")
+        );
+        noteAudit.logDelete(note.getOwnerUsername(), noteId);
+        noteRepo.delete(note);
     }
 
     @Override
