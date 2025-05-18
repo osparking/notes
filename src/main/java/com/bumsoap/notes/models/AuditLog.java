@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class AuditLog {
@@ -16,4 +18,5 @@ public class AuditLog {
   private String username;
   private Long noteId;
   private String noteContent;
+  private LocalDateTime timestamp;
 }
