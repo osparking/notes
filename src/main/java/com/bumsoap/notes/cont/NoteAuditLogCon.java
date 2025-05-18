@@ -22,6 +22,6 @@ public class NoteAuditLogCon {
 
   @GetMapping("/note/{id}")
   public List<AuditLog> getAuditLogsFor(Long noteId) {
-
+    return noteAudit.getAuditLogsFor(noteId);
   }
 }
