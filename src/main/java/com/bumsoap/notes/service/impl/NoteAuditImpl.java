@@ -21,7 +21,7 @@ public class NoteAuditImpl implements NoteAudit {
     noteLog.setNoteId(note.getId());
     noteLog.setNoteContent(note.getContent());
     noteLog.setUsername(username);
-    noteLog.setAction("create");
+    noteLog.setAction("생성");
     noteLog.setTimestamp(LocalDateTime.now());
     noteAuditRepo.save(noteLog);
   }
