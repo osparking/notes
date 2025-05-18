@@ -17,7 +17,7 @@ public class NoteAuditLogCon {
 
   @GetMapping
   public List<AuditLog> getAllAuditLogs() {
-
+    return noteAudit.getAllAuditLogs();
   }
 
   @GetMapping("/note/{id}")
