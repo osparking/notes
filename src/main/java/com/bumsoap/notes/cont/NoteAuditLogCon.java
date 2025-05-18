@@ -4,6 +4,7 @@ import com.bumsoap.notes.models.AuditLog;
 import com.bumsoap.notes.service.NoteAudit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +21,8 @@ public class NoteAuditLogCon {
     return noteAudit.getAllAuditLogs();
   }
 
-  @GetMapping("/note/{id}")
-  public List<AuditLog> getAuditLogsFor(Long noteId) {
+  @GetMapping("/note/{noteId}")
+  public List<AuditLog> getAuditLogsFor(@PathVariable Long noteId) {
     return noteAudit.getAuditLogsFor(noteId);
   }
 }
