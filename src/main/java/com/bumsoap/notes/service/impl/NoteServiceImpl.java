@@ -22,8 +22,9 @@ public class NoteServiceImpl implements NoteService {
         Note note = new Note();
         note.setContent(content);
         note.setOwnerUsername(username);
-        noteAudit.logCreate(username, note);
-        return noteRepo.save(note);
+        Note saved = noteRepo.save(note);
+        noteAudit.logCreate(username, saved);
+        return saved;
     }
 
     @Override
