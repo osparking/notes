@@ -7,5 +7,5 @@ public interface NoteAudit {
 
   void logUpdate(String username, Note note);
 
-  void logDelete(String username, Note note);
+  void logDelete(String username, Long noteId);
 }
