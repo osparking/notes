@@ -52,4 +52,9 @@ public class NoteAuditImpl implements NoteAudit {
     return noteAuditRepo.findAll();
   }
 
+  @Override
+  public List<AuditLog> getAuditLogsFor(Long noteId) {
+    return noteAuditRepo.findByNoteId(noteId);
+  }
+
 }

@@ -12,5 +12,7 @@ public interface NoteAudit {
 
   void logDelete(String username, Long noteId);
 
-  public List<AuditLog> getAllAuditLogs();
+  List<AuditLog> getAllAuditLogs();
+
+  List<AuditLog> getAuditLogsFor(Long noteId);
 }
