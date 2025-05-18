@@ -2,6 +2,7 @@ package com.bumsoap.notes.service.impl;
 
 import com.bumsoap.notes.models.Note;
 import com.bumsoap.notes.repo.NoteRepo;
+import com.bumsoap.notes.service.NoteAudit;
 import com.bumsoap.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import java.util.List;
 @Service
 public class NoteServiceImpl implements NoteService {
     @Autowired
+    private NoteAudit noteAudit;
+
+    @Autowired
     private NoteRepo noteRepo;
 
     @Override
@@ -18,6 +22,7 @@ public class NoteServiceImpl implements NoteService {
         Note note = new Note();
         note.setContent(content);
         note.setOwnerUsername(username);
+        noteAudit.logCreate(username, note);
         return noteRepo.save(note);
     }
 
