@@ -20,7 +20,7 @@ public class NoteAuditLogCon {
 
   }
 
-  @GetMapping("/note/{id")
+  @GetMapping("/note/{id}")
   public List<AuditLog> getAuditLogsFor(Long noteId) {
 
   }
