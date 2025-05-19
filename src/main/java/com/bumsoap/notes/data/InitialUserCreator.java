@@ -16,51 +16,51 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 public class InitialUserCreator implements ApplicationListener<ApplicationReadyEvent> {
-    private final RoleRepo roleRepo;
-    private final UserRepo userRepo;
-    private final PasswordEncoder passwordEncoder;
+  private final RoleRepo roleRepo;
+  private final UserRepo userRepo;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
-        createAdmin();
-        createUser1();
-    }
+  @Override
+  public void onApplicationEvent(ApplicationReadyEvent event) {
+    createAdmin();
+    createUser1();
+  }
 
-private void createAdmin() {
+  private void createAdmin() {
     Role adminRole = roleRepo.findByRoleName(AppRole.ROLE_ADMIN)
-            .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_ADMIN)));
+        .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_ADMIN)));
 
     if (!userRepo.existsByUsername("admin")) {
-        User admin = new User("admin", "admin@email.com", passwordEncoder.encode("1234"));
-        admin.setAccountNonLocked(true);
-        admin.setAccountNonExpired(true);
-        admin.setCredentialsNonExpired(true);
-        admin.setEnabled(true);
-        admin.setCredentialsExpiration(LocalDate.now().plusYears(1));
-        admin.setAccountExpiration(LocalDate.now().plusYears(1));
-        admin.setTwoFactorEnabled(false);
-        admin.setSignUpMethod("email");
-        admin.setRole(adminRole);
-        userRepo.save(admin);
+      User admin = new User("admin", "admin@email.com", passwordEncoder.encode("1234"));
+      admin.setAccountNonLocked(true);
+      admin.setAccountNonExpired(true);
+      admin.setCredentialsNonExpired(true);
+      admin.setEnabled(true);
+      admin.setCredentialsExpiration(LocalDate.now().plusYears(1));
+      admin.setAccountExpiration(LocalDate.now().plusYears(1));
+      admin.setTwoFactorEnabled(false);
+      admin.setSignUpMethod("email");
+      admin.setRole(adminRole);
+      userRepo.save(admin);
     }
-}
+  }
 
-    private void createUser1() {
-        Role userRole = roleRepo.findByRoleName(AppRole.ROLE_USER)
-                .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_USER)));
+  private void createUser1() {
+    Role userRole = roleRepo.findByRoleName(AppRole.ROLE_USER)
+        .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_USER)));
 
-        if (!userRepo.existsByUsername("user1")) {
-            User user1 = new User("user1", "user1@email.com", passwordEncoder.encode("1234"));
-            user1.setAccountNonLocked(false);
-            user1.setAccountNonExpired(true);
-            user1.setCredentialsNonExpired(true);
-            user1.setEnabled(true);
-            user1.setCredentialsExpiration(LocalDate.now().plusYears(1));
-            user1.setAccountExpiration(LocalDate.now().plusYears(1));
-            user1.setTwoFactorEnabled(false);
-            user1.setSignUpMethod("email");
-            user1.setRole(userRole);
-            userRepo.save(user1);
-        }
+    if (!userRepo.existsByUsername("user1")) {
+      User user1 = new User("user1", "user1@email.com", passwordEncoder.encode("1234"));
+      user1.setAccountNonLocked(false);
+      user1.setAccountNonExpired(true);
+      user1.setCredentialsNonExpired(true);
+      user1.setEnabled(true);
+      user1.setCredentialsExpiration(LocalDate.now().plusYears(1));
+      user1.setAccountExpiration(LocalDate.now().plusYears(1));
+      user1.setTwoFactorEnabled(false);
+      user1.setSignUpMethod("email");
+      user1.setRole(userRole);
+      userRepo.save(user1);
     }
+  }
 }
