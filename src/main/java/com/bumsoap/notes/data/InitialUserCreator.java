@@ -24,6 +24,7 @@ public class InitialUserCreator implements ApplicationListener<ApplicationReadyE
   public void onApplicationEvent(ApplicationReadyEvent event) {
     createAdmin();
     createUser1();
+    create20Users();
   }
 
   private void createAdmin() {
@@ -61,6 +62,28 @@ public class InitialUserCreator implements ApplicationListener<ApplicationReadyE
       user1.setSignUpMethod("email");
       user1.setRole(userRole);
       userRepo.save(user1);
+    }
+  }
+
+  private void create20Users() {
+    Role userRole = roleRepo.findByRoleName(AppRole.ROLE_USER)
+        .orElseGet(() -> roleRepo.save(new Role(AppRole.ROLE_USER)));
+
+    for (int i = 0; i < 20; i++) {
+      String username = "user" + (i + 2);
+      if (!userRepo.existsByUsername(username)) {
+        User user = new User(username, username + "@email.com", passwordEncoder.encode("1234"));
+        user.setAccountNonLocked(false);
+        user.setAccountNonExpired(true);
+        user.setCredentialsNonExpired(true);
+        user.setEnabled(true);
+        user.setCredentialsExpiration(LocalDate.now().plusYears(1));
+        user.setAccountExpiration(LocalDate.now().plusYears(1));
+        user.setTwoFactorEnabled(false);
+        user.setSignUpMethod("email");
+        user.setRole(userRole);
+        userRepo.save(user);
+      }
     }
   }
 }
