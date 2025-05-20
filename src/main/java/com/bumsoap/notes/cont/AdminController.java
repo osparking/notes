@@ -19,6 +19,19 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @PutMapping("/update-password")
+    public ResponseEntity<String> updatePassword(
+        @RequestParam Long userId, @RequestParam String password) {
+        try {
+            userService.updatePassword(userId, password);
+            return ResponseEntity.ok("패스워드 갱신됨!");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+        }
+    }
+
     @PutMapping("/update-credentials-expiry-status")
     public ResponseEntity<String> updateCredentialsExpiryStatus(
         @RequestParam Long userId, @RequestParam boolean expire) {
