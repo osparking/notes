@@ -19,6 +19,13 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @PutMapping("/update-expiry-status")
+    public ResponseEntity<String> updateAccountExpiryStatus(
+        @RequestParam Long userId, @RequestParam boolean expire) {
+        userService.updateAccountExpiryStatus(userId, expire);
+        return ResponseEntity.ok("계정 만료 상태 갱신됨");
+    }
+
     @GetMapping("/roles")
     public List<Role> getAllRoles() {
         return userService.getAllRoles();
