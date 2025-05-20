@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
+  void updateAccountLockStatus(Long userId, boolean lock);
+
   User findByUsername(String username);
 
   //    @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -20,6 +20,14 @@ public class UserServiceImpl implements UserService {
   private final RoleRepo roleRepo;
 
   @Override
+  public void updateAccountLockStatus(Long userId, boolean lock) {
+    User user = userRepo.findById(userId).orElseThrow(()
+        -> new RuntimeException("유저 발견 실패"));
+    user.setAccountNonLocked(!lock);
+    userRepo.save(user);
+  }
+
+  @Override
   public User findByUsername(String username) {
     Optional<User> user = userRepo.findByUsername(username);
     return user.orElseThrow(() -> new RuntimeException(
