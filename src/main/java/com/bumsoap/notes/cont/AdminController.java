@@ -19,6 +19,13 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @PutMapping("/update-credentials-expiry-status")
+    public ResponseEntity<String> updateCredentialsExpiryStatus(
+        @RequestParam Long userId, @RequestParam boolean expire) {
+        userService.updateCredentialsExpiryStatus(userId, expire);
+        return ResponseEntity.ok("자격정보 만료 상태 갱신됨");
+    }
+
     @PutMapping("/update-enabled-status")
     public ResponseEntity<String> updateAccountEnabledStatus(
         @RequestParam Long userId, @RequestParam boolean enabled) {
