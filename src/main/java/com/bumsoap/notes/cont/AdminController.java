@@ -1,6 +1,7 @@
 package com.bumsoap.notes.cont;
 
 import com.bumsoap.notes.dtos.UserDto;
+import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
 import com.bumsoap.notes.security.serv.UserDetailsImpl;
 import com.bumsoap.notes.service.UserService;
@@ -20,7 +21,7 @@ public class AdminController {
 
     @GetMapping("/roles")
     public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+        return userService.getAllRoles();
     }
 
     @PutMapping("/update-lock-status")
