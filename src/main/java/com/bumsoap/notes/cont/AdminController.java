@@ -18,6 +18,13 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @PutMapping("/update-lock-status")
+    public ResponseEntity<String> updateAccountLockStatus(
+        @RequestParam Long userId, @RequestParam boolean lock) {
+        userService.updateAccountLockStatus(userId, lock);
+        return ResponseEntity.ok("계정 잠금 상태 갱신됨");
+    }
+
     @GetMapping("/getusers")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(),
