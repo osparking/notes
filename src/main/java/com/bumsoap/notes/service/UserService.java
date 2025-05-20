@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
+  void updatePassword(Long userId, String password);
+
   void updateCredentialsExpiryStatus(
       Long userId, boolean expire);
 

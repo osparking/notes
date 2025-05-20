@@ -8,6 +8,7 @@ import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
 import com.bumsoap.notes.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +19,25 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
   private final UserRepo userRepo;
   private final RoleRepo roleRepo;
+  private final PasswordEncoder passwordEncoder;
+
+  @Override
+  public void updatePassword(Long userId, String password) {
+    try {
+      User user = userRepo.findById(userId)
+          .orElseThrow(() -> new RuntimeException("유저 발견 실패"));
+      user.setPassword(passwordEncoder.encode(password));
+      userRepo.save(user);
+    } catch (Exception e) {
+      throw new RuntimeException("패스워드 갱신 실패!");
+    }
+  }
 
   @Override
   public void updateCredentialsExpiryStatus(
       Long userId, boolean expire) {
     User user = userRepo.findById(userId).orElseThrow(()
-        -> new RuntimeException("User not found"));
+        -> new RuntimeException("유저 발견 실패"));
     user.setCredentialsNonExpired(!expire);
     userRepo.save(user);
   }
