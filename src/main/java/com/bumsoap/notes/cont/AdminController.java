@@ -18,6 +18,11 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/roles")
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
     @PutMapping("/update-lock-status")
     public ResponseEntity<String> updateAccountLockStatus(
         @RequestParam Long userId, @RequestParam boolean lock) {

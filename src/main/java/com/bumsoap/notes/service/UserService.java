@@ -1,12 +1,15 @@
 package com.bumsoap.notes.service;
 
 import com.bumsoap.notes.dtos.UserDto;
+import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 public interface UserService {
+  List<Role> getAllRoles();
+
   void updateAccountLockStatus(Long userId, boolean lock);
 
   User findByUsername(String username);
