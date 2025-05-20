@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
+  void updateAccountExpiryStatus(Long userId, boolean expire);
+
   List<Role> getAllRoles();
 
   void updateAccountLockStatus(Long userId, boolean lock);

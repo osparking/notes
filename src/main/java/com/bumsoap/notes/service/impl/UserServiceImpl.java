@@ -20,6 +20,14 @@ public class UserServiceImpl implements UserService {
   private final RoleRepo roleRepo;
 
   @Override
+  public void updateAccountExpiryStatus(Long userId, boolean expire) {
+    User user = userRepo.findById(userId).orElseThrow(()
+        -> new RuntimeException("유저 발견 실패"));
+    user.setAccountNonExpired(!expire);
+    userRepo.save(user);
+  }
+
+  @Override
   public List<Role> getAllRoles() {
     return roleRepo.findAll();
   }
