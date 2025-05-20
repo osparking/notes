@@ -20,6 +20,15 @@ public class UserServiceImpl implements UserService {
   private final RoleRepo roleRepo;
 
   @Override
+  public void updateCredentialsExpiryStatus(
+      Long userId, boolean expire) {
+    User user = userRepo.findById(userId).orElseThrow(()
+        -> new RuntimeException("User not found"));
+    user.setCredentialsNonExpired(!expire);
+    userRepo.save(user);
+  }
+
+  @Override
   public void updateAccountEnabledStatus(Long userId, boolean enabled) {
     User user = userRepo.findById(userId).orElseThrow(()
         -> new RuntimeException("유저 발견 실패"));
