@@ -19,6 +19,13 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @PutMapping("/update-enabled-status")
+    public ResponseEntity<String> updateAccountEnabledStatus(
+        @RequestParam Long userId, @RequestParam boolean enabled) {
+        userService.updateAccountEnabledStatus(userId, enabled);
+        return ResponseEntity.ok("계정 활성 상태 갱신됨");
+    }
+
     @PutMapping("/update-expiry-status")
     public ResponseEntity<String> updateAccountExpiryStatus(
         @RequestParam Long userId, @RequestParam boolean expire) {
