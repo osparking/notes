@@ -2,17 +2,23 @@ package com.bumsoap.notes.service.impl;
 
 import com.bumsoap.notes.dtos.UserDto;
 import com.bumsoap.notes.models.AppRole;
+import com.bumsoap.notes.models.PasswordResetToken;
 import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
+import com.bumsoap.notes.repo.PasswordResetTokenRepo;
 import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
 import com.bumsoap.notes.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +26,27 @@ public class UserServiceImpl implements UserService {
   private final UserRepo userRepo;
   private final RoleRepo roleRepo;
   private final PasswordEncoder passwordEncoder;
+  private final PasswordResetTokenRepo passwordResetTokenRepo;
+
+  @Value("${frontend.url}")
+  private String frontendUrl;
+
+  @Override
+  public void generatePasswordResetTokenFor(String email) {
+    User user = userRepo.findByEmail(email).orElseThrow(
+        () -> new RuntimeException("발견되지 않은 이메일: " + email));
+    String token = UUID.randomUUID().toString();
+    Instant expiryDate = Instant.now().plus(24, ChronoUnit.HOURS);
+    PasswordResetToken resetToken =
+        new PasswordResetToken(token, expiryDate, user);
+    passwordResetTokenRepo.save(resetToken);
+
+    String pwdResetLink =
+        frontendUrl + "/reset-password?token=" + token;
+    /**
+     * 위 링크를 내포한 패스워드 변경 안내 이메일을 전송한다.
+     */
+  }
 
   @Override
   public void updatePassword(Long userId, String password) {

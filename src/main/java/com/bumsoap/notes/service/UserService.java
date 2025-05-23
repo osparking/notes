@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 public interface UserService {
+  void generatePasswordResetTokenFor(String email);
+
   void updatePassword(Long userId, String password);
 
   void updateCredentialsExpiryStatus(
