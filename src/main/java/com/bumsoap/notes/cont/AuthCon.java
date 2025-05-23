@@ -33,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,12 +46,24 @@ public class AuthCon {
   private final RoleRepo roleRepo;
   private final UserService userService;
 
-@GetMapping("/username")
-public ResponseEntity<String> getUsername(
-    @AuthenticationPrincipal UserDetails userDetails) {
-  var name = userDetails == null ? "" : userDetails.getUsername();
-  return ResponseEntity.ok().body(name);
-}
+  @PostMapping("/public/forgotten-pwd")
+  public ResponseEntity<?> forgottenPwd(@RequestParam String email) {
+    try {
+      userService.generatePasswordResetTokenFor(email);
+      return ResponseEntity
+          .ok(new MessageResponse("비밀번호 리셋 이메일 전송됨"));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(new MessageResponse("비밀번호 리셋 이메일 오류"));
+    }
+  }
+
+  @GetMapping("/username")
+  public ResponseEntity<String> getUsername(
+      @AuthenticationPrincipal UserDetails userDetails) {
+    var name = userDetails == null ? "" : userDetails.getUsername();
+    return ResponseEntity.ok().body(name);
+  }
 
   @GetMapping("/user")
   public ResponseEntity<?> getUserDetails(
