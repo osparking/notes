@@ -9,6 +9,7 @@ import com.bumsoap.notes.repo.PasswordResetTokenRepo;
 import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
 import com.bumsoap.notes.service.UserService;
+import com.bumsoap.notes.util.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
   private final RoleRepo roleRepo;
   private final PasswordEncoder passwordEncoder;
   private final PasswordResetTokenRepo passwordResetTokenRepo;
+  private final EmailService emailService;
 
   @Value("${frontend.url}")
   private String frontendUrl;
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 위 링크를 내포한 패스워드 변경 안내 이메일을 전송한다.
      */
+    emailService.sendPasswordResetMail(user.getEmail(), pwdResetLink);
   }
 
   @Override
