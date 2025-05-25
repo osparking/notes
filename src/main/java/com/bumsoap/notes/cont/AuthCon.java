@@ -1,5 +1,6 @@
 package com.bumsoap.notes.cont;
 
+import java.lang.module.ResolutionException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,6 @@ import com.bumsoap.notes.responses.MessageResponse;
 import com.bumsoap.notes.responses.UserInfoResponse;
 import com.bumsoap.notes.security.jwt.JwtUtils;
 import com.bumsoap.notes.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -45,6 +44,18 @@ public class AuthCon {
   private final PasswordEncoder encoder;
   private final RoleRepo roleRepo;
   private final UserService userService;
+
+  @PostMapping("/public/reset-password")
+  public ResponseEntity<?> resetPassword(@RequestParam String token,
+                                         @RequestParam String newPassword) {
+    try {
+      userService.resetPassword(token, newPassword);
+      return ResponseEntity.ok(new MessageResponse("패스워드 재설정 성공"));
+    } catch (ResolutionException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body(new MessageResponse(e.getMessage()));
+    }
+  }
 
   @PostMapping("/public/forgotten-pwd")
   public ResponseEntity<?> forgottenPwd(@RequestParam String email) {
