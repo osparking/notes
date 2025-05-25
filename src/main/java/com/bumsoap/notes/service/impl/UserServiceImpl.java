@@ -33,8 +33,6 @@ public class UserServiceImpl implements UserService {
   @Value("${frontend.url}")
   private String frontendUrl;
 
-
-
   @Override
   public void resetPassword(String token, String newPassword) {
     var passwordResetToken = passwordResetTokenRepo.findByToken(token)
