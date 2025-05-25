@@ -3,7 +3,6 @@ package com.bumsoap.notes.service;
 import com.bumsoap.notes.dtos.UserDto;
 import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -33,4 +32,6 @@ public interface UserService {
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN') OR #loginId == #userId")
     UserDto getUserById(Long loginId, Long userId);
+
+  void resetPassword(String token, String newPassword);
 }

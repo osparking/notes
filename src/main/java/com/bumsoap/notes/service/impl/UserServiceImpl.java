@@ -33,6 +33,28 @@ public class UserServiceImpl implements UserService {
   @Value("${frontend.url}")
   private String frontendUrl;
 
+
+
+  @Override
+  public void resetPassword(String token, String newPassword) {
+    var passwordResetToken = passwordResetTokenRepo.findByToken(token)
+        .orElseThrow(() ->
+            new RuntimeException("존재하지 않는 패스워드 리셋 토큰"));
+    if (passwordResetToken.isUsed()) {
+      throw new RuntimeException("이미 사용된 패스워드 리셋 토큰");
+    }
+    if (passwordResetToken.getExpiryDate().isBefore(Instant.now())) {
+      throw new RuntimeException("만료된 패스워드 리셋 토큰");
+    }
+
+    User user = passwordResetToken.getUser();
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepo.save(user);
+
+    passwordResetToken.setUsed(true);
+    passwordResetTokenRepo.save(passwordResetToken);
+  }
+
   @Override
   public void generatePasswordResetTokenFor(String email) {
     User user = userRepo.findByEmail(email).orElseThrow(
@@ -59,6 +81,7 @@ public class UserServiceImpl implements UserService {
       user.setPassword(passwordEncoder.encode(password));
       userRepo.save(user);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new RuntimeException("패스워드 갱신 실패!");
     }
   }
