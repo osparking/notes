@@ -5,6 +5,7 @@ import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
   void generatePasswordResetTokenFor(String email);
@@ -34,4 +35,8 @@ public interface UserService {
     UserDto getUserById(Long loginId, Long userId);
 
   void resetPassword(String token, String newPassword);
+
+  Optional<User> findByEmail(String email);
+
+  User registerUser(User newUser);
 }
