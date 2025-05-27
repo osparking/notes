@@ -54,6 +54,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public Optional<User> findByEmail(String email) {
+    return userRepo.findByEmail(email);
+  }
+
+  @Override
+  public User registerUser(User user) {
+    if (user.getPassword() != null)
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return userRepo.save(user);
+  }
+
+  @Override
   public void generatePasswordResetTokenFor(String email) {
     User user = userRepo.findByEmail(email).orElseThrow(
         () -> new RuntimeException("발견되지 않은 이메일: " + email));
