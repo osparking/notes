@@ -53,8 +53,7 @@ public class OAuth2LoginSuccessHandler
       HttpServletRequest request,
       HttpServletResponse response,
       Authentication authentication)
-      throws ServletException, IOException
-  {
+      throws ServletException, IOException {
     OAuth2AuthenticationToken oAuth2AuthenticationToken
         = (OAuth2AuthenticationToken) authentication;
     String oAuth2 = oAuth2AuthenticationToken
@@ -88,7 +87,25 @@ public class OAuth2LoginSuccessHandler
                     attributes, idAttributeKey, oAuth2);
               },
               // 이메일이 DB 에 부재인 경우 처리
-              () -> {}
+              () -> {
+                User newUser = new User();
+                Optional<Role> userRole = roleRepository
+                    .findByRoleName(AppRole.ROLE_USER);
+
+                // Fetch existing role
+                if (userRole.isPresent()) {
+                  newUser.setRole(userRole.get()); // Set existing role
+                  newUser.setEmail(email);
+                  newUser.setUsername(username);
+                  newUser.setSignUpMethod(oAuth2);
+                  userService.registerUser(newUser);
+                  putAuth2Context(userRole.get().getRoleName().name(),
+                      attributes, idAttributeKey, oAuth2);
+                } else {
+                  // Handle the case where the role is not found
+                  throw new RuntimeException("기본 롤이 DB 에 없음!");
+                }
+              }
           );
     }
   }
