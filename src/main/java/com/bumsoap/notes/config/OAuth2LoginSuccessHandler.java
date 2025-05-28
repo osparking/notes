@@ -108,6 +108,26 @@ public class OAuth2LoginSuccessHandler
               }
           );
     }
+    this.setAlwaysUseDefaultTargetUrl(true);
+
+    // JWT TOKEN LOGIC
+    // Extract necessary attributes
+    String email = (String) attributes.get("email");
+    System.out.println("SuccessHandler: " + username + " : " + email);
+
+    // Create UserDetailsImpl instance
+    UserDetailsImpl userDetails = new UserDetailsImpl(
+        null,
+        username,
+        email,
+        null,
+        false,
+        oauth2User.getAuthorities().stream()
+            .map(authority ->
+                new SimpleGrantedAuthority(authority.getAuthority()))
+            .collect(Collectors.toList())
+    );
+
   }
 
   private void putAuth2Context(String role,
