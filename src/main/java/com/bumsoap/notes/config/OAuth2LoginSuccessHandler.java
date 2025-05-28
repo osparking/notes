@@ -80,6 +80,16 @@ public class OAuth2LoginSuccessHandler
       }
       System.out.println("OAUTH: " + email + " : " + name + " : " + username);
 
+      userService.findByEmail(email)
+          .ifPresentOrElse(
+              // 이메일이 DB 에 존재하는 경우 처리
+              user -> {
+                putAuth2Context(user.getRole().getRoleName().name(),
+                    attributes, idAttributeKey, oAuth2);
+              },
+              // 이메일이 DB 에 부재인 경우 처리
+              () -> {}
+          );
     }
   }
 
