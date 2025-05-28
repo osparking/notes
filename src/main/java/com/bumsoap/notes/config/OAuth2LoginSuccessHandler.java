@@ -1,7 +1,11 @@
 package com.bumsoap.notes.config;
 
+import com.bumsoap.notes.models.AppRole;
+import com.bumsoap.notes.models.Role;
+import com.bumsoap.notes.models.User;
 import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.security.jwt.JwtUtils;
+import com.bumsoap.notes.security.serv.UserDetailsImpl;
 import com.bumsoap.notes.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +20,13 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +54,15 @@ public class OAuth2LoginSuccessHandler
       HttpServletResponse response,
       Authentication authentication)
       throws ServletException, IOException
-  {}
+  {
+    OAuth2AuthenticationToken oAuth2AuthenticationToken
+        = (OAuth2AuthenticationToken) authentication;
+    String oAuth2 = oAuth2AuthenticationToken
+        .getAuthorizedClientRegistrationId();
+    var oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
+    Map<String, Object> attributes = oauth2User.getAttributes();
+
+  }
 
   private void putAuth2Context(String role,
                                Map<String, Object> attributes,
