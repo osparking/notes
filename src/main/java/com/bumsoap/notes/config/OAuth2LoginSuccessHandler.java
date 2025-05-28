@@ -62,6 +62,25 @@ public class OAuth2LoginSuccessHandler
     var oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
     Map<String, Object> attributes = oauth2User.getAttributes();
 
+    if ("github".equals(oAuth2) || "google".equals(oAuth2)) {
+      String email = attributes.getOrDefault("email", "").toString();
+      String name = attributes.getOrDefault("name", "").toString();
+
+      if ("github".equals(oAuth2AuthenticationToken
+          .getAuthorizedClientRegistrationId())) {
+        username = attributes.getOrDefault("login", "").toString();
+        idAttributeKey = "id";
+      } else if ("google".equals(oAuth2AuthenticationToken
+          .getAuthorizedClientRegistrationId())) {
+        username = email.split("@")[0];
+        idAttributeKey = "sub";
+      } else {
+        username = "";
+        idAttributeKey = "id";
+      }
+      System.out.println("OAUTH: " + email + " : " + name + " : " + username);
+
+    }
   }
 
   private void putAuth2Context(String role,
