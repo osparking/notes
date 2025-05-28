@@ -128,6 +128,17 @@ public class OAuth2LoginSuccessHandler
             .collect(Collectors.toList())
     );
 
+    // Generate JWT token
+    String jwtToken = jwtUtils.generateTokenFromUsername(
+        userDetails.getUsername());
+
+    // Redirect to the frontend with the JWT token
+    String targetUrl = UriComponentsBuilder.fromUriString(
+            frontendUrl + "/oauth2/redirect")
+        .queryParam("token", jwtToken)
+        .build().toUriString();
+    this.setDefaultTargetUrl(targetUrl);
+    super.onAuthenticationSuccess(request, response, authentication);
   }
 
   private void putAuth2Context(String role,
