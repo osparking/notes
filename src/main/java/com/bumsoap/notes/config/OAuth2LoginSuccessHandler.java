@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,6 +98,8 @@ public class OAuth2LoginSuccessHandler
                   newUser.setRole(userRole.get()); // Set existing role
                   newUser.setEmail(email);
                   newUser.setUsername(username);
+                  newUser.setCredentialsExpiration(LocalDate.now().plusYears(1));
+                  newUser.setAccountExpiration(LocalDate.now().plusYears(1));
                   newUser.setSignUpMethod(oAuth2);
                   userService.registerUser(newUser);
                   putAuth2Context(userRole.get().getRoleName().name(),
