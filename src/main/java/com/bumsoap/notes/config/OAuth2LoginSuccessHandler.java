@@ -132,8 +132,7 @@ public class OAuth2LoginSuccessHandler
     );
 
     // Generate JWT token
-    String jwtToken = jwtUtils.generateTokenFromUsername(
-        userDetails.getUsername());
+    String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
 
     // Redirect to the frontend with the JWT token
     String targetUrl = UriComponentsBuilder.fromUriString(

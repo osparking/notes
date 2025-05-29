@@ -122,7 +122,7 @@ public class AuthCon {
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-    String jwtToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
+    String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
 
     // Collect roles from the UserDetails
     List<String> roles = userDetails.getAuthorities().stream()
