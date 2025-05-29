@@ -1,10 +1,12 @@
 package com.bumsoap.notes.security;
 
+import com.bumsoap.notes.config.OAuth2LoginSuccessHandler;
 import com.bumsoap.notes.security.jwt.AuthEntryPointJwt;
 import com.bumsoap.notes.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,6 +42,10 @@ public class SecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    @Autowired
+    @Lazy
+    private OAuth2LoginSuccessHandler successHandler;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -63,8 +69,8 @@ public class SecurityConfig {
                 .requestMatchers("/oauth2/**").permitAll()
                 .anyRequest().authenticated())
             .oauth2Login(oauth -> {
-                }
-            );
+                oauth.successHandler(successHandler);
+            });
         http.csrf(csrf -> csrf.csrfTokenRepository(
                 CookieCsrfTokenRepository.withHttpOnlyFalse())
             .ignoringRequestMatchers("/api/auth/public/**"));
