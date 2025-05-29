@@ -24,9 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -118,6 +116,15 @@ public class OAuth2LoginSuccessHandler
     String email = (String) attributes.get("email");
     System.out.println("SuccessHandler: " + username + " : " + email);
 
+    Set<SimpleGrantedAuthority> authorities=
+        oauth2User.getAuthorities().stream().map(
+            authority -> new SimpleGrantedAuthority(
+                authority.getAuthority())).collect(Collectors.toSet());
+    User user = userService.findByEmail(email).orElseThrow(
+        () -> new RuntimeException("이메일로 유저 검색 실패"));
+    authorities.add(new SimpleGrantedAuthority(
+        user.getRole().getRoleName().name()));
+
     // Create UserDetailsImpl instance
     UserDetailsImpl userDetails = new UserDetailsImpl(
         null,
@@ -125,10 +132,7 @@ public class OAuth2LoginSuccessHandler
         email,
         null,
         false,
-        oauth2User.getAuthorities().stream()
-            .map(authority ->
-                new SimpleGrantedAuthority(authority.getAuthority()))
-            .collect(Collectors.toList())
+        authorities
     );
 
     // Generate JWT token
