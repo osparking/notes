@@ -84,6 +84,7 @@ public class OAuth2LoginSuccessHandler
               user -> {
                 putAuth2Context(user.getRole().getRoleName().name(),
                     attributes, idAttributeKey, oAuth2);
+                username = user.getUsername();
               },
               // 이메일이 DB 에 부재인 경우 처리
               () -> {
