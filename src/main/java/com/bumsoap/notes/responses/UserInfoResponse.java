@@ -20,6 +20,8 @@ public class UserInfoResponse {
   private LocalDate accountExpiryDate;
   private boolean isTwoFactorEnabled;
   private List<String> roles;
+  private String signUpMethod;
+  private String loginMethod;
 
   public UserInfoResponse(Long id,
                           String username,
@@ -31,7 +33,9 @@ public class UserInfoResponse {
                           LocalDate credentialsExpiryDate,
                           LocalDate accountExpiryDate,
                           boolean isTwoFactorEnabled,
-                          List<String> roles) {
+                          List<String> roles,
+                          String signUpMethod,
+                          String loginMethod) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -43,5 +47,7 @@ public class UserInfoResponse {
     this.accountExpiryDate = accountExpiryDate;
     this.isTwoFactorEnabled = isTwoFactorEnabled;
     this.roles = roles;
+    this.signUpMethod = signUpMethod;
+    this.loginMethod = loginMethod;
   }
 }
