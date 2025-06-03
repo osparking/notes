@@ -115,16 +115,22 @@ public class AuthCon {
               loginRequest.getUsername(), loginRequest.getPassword()));
     } catch (AuthenticationException exception) {
       Map<String, Object> map = new HashMap<>();
-      map.put("message", "Bad credentials");
       map.put("status", false);
+      User user = userService.findByUsername(loginRequest.getUsername());
+      if (user.getSignUpMethod().equals("유저네임")) {
+        map.put("message", "Bad credentials");
+      } else {
+        map.put("message", user.getSignUpMethod() + "로 로그인하세요.");
+      }
 
-      return new ResponseEntity<Object>(map, HttpStatus.NOT_FOUND);
+      return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
     }
 
     // set the authentication
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    var userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    userDetails.setLoginMethod("유저네임");
     String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
 
     // Collect roles from the UserDetails
