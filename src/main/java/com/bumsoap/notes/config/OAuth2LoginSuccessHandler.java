@@ -7,6 +7,7 @@ import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.security.jwt.JwtUtils;
 import com.bumsoap.notes.security.serv.UserDetailsImpl;
 import com.bumsoap.notes.service.UserService;
+import com.bumsoap.notes.util.SLogin;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,6 +47,7 @@ public class OAuth2LoginSuccessHandler
 
   String username;
   String idAttributeKey;
+  String signUpMethod = null;
 
   @Override
   public void onAuthenticationSuccess(
@@ -57,24 +59,20 @@ public class OAuth2LoginSuccessHandler
         = (OAuth2AuthenticationToken) authentication;
     String oAuth2 = oAuth2AuthenticationToken
         .getAuthorizedClientRegistrationId();
+    SLogin slogin = SLogin.valueOf(oAuth2.toUpperCase());
     var oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
     Map<String, Object> attributes = oauth2User.getAttributes();
 
-    if ("github".equals(oAuth2) || "google".equals(oAuth2)) {
+    if (slogin == SLogin.GITHUB || slogin == SLogin.GOOGLE) {
       String email = attributes.getOrDefault("email", "").toString();
       String name = attributes.getOrDefault("name", "").toString();
 
-      if ("github".equals(oAuth2AuthenticationToken
-          .getAuthorizedClientRegistrationId())) {
+      if (slogin == SLogin.GITHUB) {
         username = attributes.getOrDefault("login", "").toString();
         idAttributeKey = "id";
-      } else if ("google".equals(oAuth2AuthenticationToken
-          .getAuthorizedClientRegistrationId())) {
+      } else {
         username = email.split("@")[0];
         idAttributeKey = "sub";
-      } else {
-        username = "";
-        idAttributeKey = "id";
       }
       System.out.println("OAUTH: " + email + " : " + name + " : " + username);
 
