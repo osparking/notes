@@ -19,6 +19,7 @@ import com.bumsoap.notes.responses.LoginResponse;
 import com.bumsoap.notes.responses.MessageResponse;
 import com.bumsoap.notes.responses.UserInfoResponse;
 import com.bumsoap.notes.security.jwt.JwtUtils;
+import com.bumsoap.notes.security.serv.UserDetailsImpl;
 import com.bumsoap.notes.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -95,7 +96,9 @@ public class AuthCon {
         user.getCredentialsExpiration(),
         user.getAccountExpiration(),
         user.isTwoFactorEnabled(),
-        roles
+        roles,
+        user.getSignUpMethod(),
+        null
     );
 
     return ResponseEntity.ok().body(response);
