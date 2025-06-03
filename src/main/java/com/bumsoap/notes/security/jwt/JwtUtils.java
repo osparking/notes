@@ -1,5 +1,6 @@
 package com.bumsoap.notes.security.jwt;
 
+import com.bumsoap.notes.security.serv.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -39,9 +40,12 @@ public class JwtUtils {
     String roles = details.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.joining(","));
+    var detailsImpl = ((UserDetailsImpl)details);
     return Jwts.builder()
         .subject(details.getUsername())
         .claim("roles", roles)
+        .claim("signUpMethod", detailsImpl.getSignUpMethod())
+        .claim("loginMethod", detailsImpl.getLoginMethod())
         .issuedAt(new Date())
         .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(key())
