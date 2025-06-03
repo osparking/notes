@@ -133,7 +133,9 @@ public class OAuth2LoginSuccessHandler
         email,
         null,
         false,
-        authorities
+        authorities,
+        signUpMethod,
+        slogin.getLabel()
     );
 
     // Generate JWT token
