@@ -80,7 +80,7 @@ public class InitialUserCreator implements ApplicationListener<ApplicationReadyE
         user.setCredentialsExpiration(LocalDate.now().plusYears(1));
         user.setAccountExpiration(LocalDate.now().plusYears(1));
         user.setTwoFactorEnabled(false);
-        user.setSignUpMethod("email");
+        user.setSignUpMethod("유저네임");
         user.setRole(userRole);
         userRepo.save(user);
       }
