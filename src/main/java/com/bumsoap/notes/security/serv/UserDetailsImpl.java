@@ -23,16 +23,21 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private boolean is2faEnabled;
     private Collection<? extends GrantedAuthority> authorities;
+    private String signUpMethod;
+    private String loginMethod;
 
     public UserDetailsImpl(Long id, String username, String email,
                            String password, boolean is2faEnabled,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           Collection<? extends GrantedAuthority> authorities,
+                           String signUpMethod, String loginMethod) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.is2faEnabled = is2faEnabled;
         this.authorities = authorities;
+        this.signUpMethod = signUpMethod;
+        this.loginMethod = loginMethod;
     }
     public static UserDetailsImpl build(User user) {
         var authority = new SimpleGrantedAuthority(
@@ -43,7 +48,9 @@ public class UserDetailsImpl implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 user.isTwoFactorEnabled(),
-                List.of(authority) // Add logic for authorities if applicable
+                List.of(authority), // Add logic for authorities if applicable
+                user.getSignUpMethod(),
+                null
         );
     }
 
