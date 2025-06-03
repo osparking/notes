@@ -83,6 +83,7 @@ public class OAuth2LoginSuccessHandler
                 putAuth2Context(user.getRole().getRoleName().name(),
                     attributes, idAttributeKey, oAuth2);
                 username = user.getUsername();
+                signUpMethod = user.getSignUpMethod();
               },
               // 이메일이 DB 에 부재인 경우 처리
               () -> {
@@ -97,10 +98,11 @@ public class OAuth2LoginSuccessHandler
                   newUser.setUsername(username);
                   newUser.setCredentialsExpiration(LocalDate.now().plusYears(1));
                   newUser.setAccountExpiration(LocalDate.now().plusYears(1));
-                  newUser.setSignUpMethod(oAuth2);
+                  newUser.setSignUpMethod(slogin.getLabel());
                   userService.registerUser(newUser);
                   putAuth2Context(userRole.get().getRoleName().name(),
                       attributes, idAttributeKey, oAuth2);
+                  signUpMethod = oAuth2;
                 } else {
                   // Handle the case where the role is not found
                   throw new RuntimeException("기본 롤이 DB 에 없음!");
