@@ -65,6 +65,20 @@ public class AuthCon {
     }
   }
 
+  @PostMapping("/public/verify-2fa-login")
+  public ResponseEntity<String> verify2FAlogin(@RequestParam int code,
+                                               @RequestParam String jwt) {
+    String username = jwtUtils.getUserNameFromJwtToken(jwt);
+    User user = userService.findByUsername(username);
+
+    if (userService.validate2FAcode(user.getUserId(), code)) {
+      return ResponseEntity.ok("2FA 검증됨");
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body("2FA 코드 오류");
+    }
+  }
+
   @PostMapping("/user/2fa-status")
   public ResponseEntity<?> get2FAstatus() {
     User user = authUtil.loggedInUser();
