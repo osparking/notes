@@ -59,6 +59,13 @@ public class AuthCon {
     return ResponseEntity.ok(qrCodeUrl);
   }
 
+  @PostMapping("/disable-2fa")
+  public ResponseEntity<String> disableUserFor2FA() {
+    Long userId = authUtil.loggedInUserId();
+    userService.disable2FA(userId);
+    return ResponseEntity.ok("2FA 비활성화됨");
+  }
+
   @PostMapping("/public/reset-password")
   public ResponseEntity<?> resetPassword(@RequestParam String token,
                                          @RequestParam String newPassword) {
