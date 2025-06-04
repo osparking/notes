@@ -20,7 +20,9 @@ import com.bumsoap.notes.responses.MessageResponse;
 import com.bumsoap.notes.responses.UserInfoResponse;
 import com.bumsoap.notes.security.jwt.JwtUtils;
 import com.bumsoap.notes.security.serv.UserDetailsImpl;
+import com.bumsoap.notes.service.TotpService;
 import com.bumsoap.notes.service.UserService;
+import com.bumsoap.notes.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,17 @@ public class AuthCon {
   private final PasswordEncoder encoder;
   private final RoleRepo roleRepo;
   private final UserService userService;
+  private final AuthUtil authUtil;
+  private final TotpService totpService;
+
+  @PostMapping("/enable-2fa")
+  public ResponseEntity<String> enableUserFor2FA() {
+    Long userId = authUtil.loggedInUserId();
+    var secret = userService.generate2FAsecret(userId);
+    String qrCodeUrl = totpService.getQRcodeUrl(secret,
+        userService.getUserById(userId).getUsername());
+    return ResponseEntity.ok(qrCodeUrl);
+  }
 
   @PostMapping("/public/reset-password")
   public ResponseEntity<?> resetPassword(@RequestParam String token,
