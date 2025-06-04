@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserDto getUserById(Long loginId, Long userId) {
+  public UserDto getUserById(Long userId) {
     User user = userRepo.findById(userId).orElseThrow();
     return convertToDto(user);
   }

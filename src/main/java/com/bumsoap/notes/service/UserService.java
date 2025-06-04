@@ -33,7 +33,7 @@ public interface UserService {
     List<User> getAllUsers();
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN') OR #loginId == #userId")
-    UserDto getUserById(Long loginId, Long userId);
+    UserDto getUserById(Long userId);
 
   GoogleAuthenticatorKey generate2FAsecret(Long userId);
 
