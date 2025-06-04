@@ -17,4 +17,10 @@ public class AuthUtil {
     return user.getUserId();
   }
 
+  public User loggedInUser() {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+    return userRepo.findByUsername(auth.getName()).orElseThrow(
+        () -> new RuntimeException("유저 이름 부재: " + auth.getName()));
+  }
+
 }
