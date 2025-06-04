@@ -79,7 +79,7 @@ public class AuthCon {
     }
   }
 
-  @PostMapping("/user/2fa-status")
+  @GetMapping("/user/2fa-status")
   public ResponseEntity<?> get2FAstatus() {
     User user = authUtil.loggedInUser();
 
