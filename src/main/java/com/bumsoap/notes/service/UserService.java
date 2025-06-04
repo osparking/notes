@@ -3,6 +3,7 @@ package com.bumsoap.notes.service;
 import com.bumsoap.notes.dtos.UserDto;
 import com.bumsoap.notes.models.Role;
 import com.bumsoap.notes.models.User;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,14 @@ public interface UserService {
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN') OR #loginId == #userId")
     UserDto getUserById(Long loginId, Long userId);
+
+  GoogleAuthenticatorKey generate2FAsecret(Long userId);
+
+  boolean validate2FAcode(Long userId, int code);
+
+  void enable2FA(Long userId);
+
+  void disable2FA(Long userId);
 
   void resetPassword(String token, String newPassword);
 

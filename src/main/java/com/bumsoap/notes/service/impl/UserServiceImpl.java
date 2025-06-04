@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
   @Value("${frontend.url}")
   private String frontendUrl;
 
+  @Override
   public GoogleAuthenticatorKey generate2FAsecret(Long userId) {
     User user = userRepo.findById(userId).orElseThrow(
         () -> new RuntimeException("유저 아이디 부재: " + userId));
@@ -45,16 +46,27 @@ public class UserServiceImpl implements UserService {
     return secret;
   }
 
+  @Override
   public boolean validate2FAcode(Long userId, int code) {
     User user = userRepo.findById(userId).orElseThrow(
         () -> new RuntimeException("유저 아이디 부재: " + userId));
     return totpService.verifyCode(user.getTwoFactorSecret(), code);
   }
 
+  @Override
   public void enable2FA(Long userId) {
+    User user = userRepo.findById(userId).orElseThrow(
+        () -> new RuntimeException("유저 아이디 부재: " + userId));
+    user.setTwoFactorEnabled(true);
+    userRepo.save(user);
   }
 
+  @Override
   public void disable2FA(Long userId) {
+    User user = userRepo.findById(userId).orElseThrow(
+        () -> new RuntimeException("유저 아이디 부재: " + userId));
+    user.setTwoFactorEnabled(false);
+    userRepo.save(user);
   }
 
   @Override
