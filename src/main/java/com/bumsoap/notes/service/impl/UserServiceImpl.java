@@ -8,8 +8,10 @@ import com.bumsoap.notes.models.User;
 import com.bumsoap.notes.repo.PasswordResetTokenRepo;
 import com.bumsoap.notes.repo.RoleRepo;
 import com.bumsoap.notes.repo.UserRepo;
+import com.bumsoap.notes.service.TotpService;
 import com.bumsoap.notes.service.UserService;
 import com.bumsoap.notes.util.EmailService;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,9 +31,24 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final PasswordResetTokenRepo passwordResetTokenRepo;
   private final EmailService emailService;
+  private final TotpService totpService;
 
   @Value("${frontend.url}")
   private String frontendUrl;
+
+  public GoogleAuthenticatorKey generate2FAsecret(Long userId) {
+    return null;
+  }
+
+  public boolean validate2FAcode(Long userId, int code) {
+    return false;
+  }
+
+  public void enable2FA(Long userId) {
+  }
+
+  public void disable2FA(Long userId) {
+  }
 
   @Override
   public void resetPassword(String token, String newPassword) {
