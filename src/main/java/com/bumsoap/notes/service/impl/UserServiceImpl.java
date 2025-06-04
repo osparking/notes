@@ -37,7 +37,12 @@ public class UserServiceImpl implements UserService {
   private String frontendUrl;
 
   public GoogleAuthenticatorKey generate2FAsecret(Long userId) {
-    return null;
+    User user = userRepo.findById(userId).orElseThrow(
+        () -> new RuntimeException("유저 아이디 부재: " + userId));
+    var secret = totpService.generateSecret();
+    user.setTwoFactorSecret(secret.getKey());
+    userRepo.save(user);
+    return secret;
   }
 
   public boolean validate2FAcode(Long userId, int code) {
