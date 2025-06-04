@@ -4,7 +4,9 @@ import com.bumsoap.notes.models.User;
 import com.bumsoap.notes.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuthUtil {
   @Autowired
   UserRepo userRepo;
