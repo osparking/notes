@@ -65,6 +65,19 @@ public class AuthCon {
     }
   }
 
+  @PostMapping("/user/2fa-status")
+  public ResponseEntity<?> get2FAstatus() {
+    User user = authUtil.loggedInUser();
+
+    if (user == null) {
+      return ResponseEntity
+          .status(HttpStatus.NOT_FOUND).body("유저 부재");
+    } else {
+      return ResponseEntity.ok().body(
+          Map.of("2FA-활성화됨", user.isTwoFactorEnabled()));
+    }
+  }
+
   @PostMapping("/enable-2fa")
   public ResponseEntity<String> enableUserFor2FA() {
     Long userId = authUtil.loggedInUserId();
