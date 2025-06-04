@@ -50,6 +50,21 @@ public class AuthCon {
   private final AuthUtil authUtil;
   private final TotpService totpService;
 
+  @PostMapping("/verify-2fa")
+  public ResponseEntity<String> verify2FA(@RequestParam int code) {
+    Long userId = authUtil.loggedInUserId();
+    boolean validCode = userService.validate2FAcode(userId, code);
+
+    if (validCode) {
+      userService.enable2FA(userId);
+      return ResponseEntity.ok("2FA 검증됨");
+    } else {
+      return ResponseEntity
+          .status(HttpStatus.UNAUTHORIZED)
+          .body("2FA 코드 오류");
+    }
+  }
+
   @PostMapping("/enable-2fa")
   public ResponseEntity<String> enableUserFor2FA() {
     Long userId = authUtil.loggedInUserId();
