@@ -73,12 +73,7 @@ public class AdminController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        Long loginId = ((UserDetailsImpl) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal()).getId();
-
-        return new ResponseEntity<>(userService.getUserById(loginId, id),
+        return new ResponseEntity<>(userService.getUserById(id),
                 HttpStatus.OK);
     }
 
