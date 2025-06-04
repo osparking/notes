@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
   }
 
   public boolean validate2FAcode(Long userId, int code) {
-    return false;
+    User user = userRepo.findById(userId).orElseThrow(
+        () -> new RuntimeException("유저 아이디 부재: " + userId));
+    return totpService.verifyCode(user.getTwoFactorSecret(), code);
   }
 
   public void enable2FA(Long userId) {
