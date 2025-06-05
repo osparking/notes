@@ -67,8 +67,8 @@ public class AuthCon {
 
   @PostMapping("/public/verify-2fa-login")
   public ResponseEntity<String> verify2FAlogin(@RequestParam int code,
-                                               @RequestParam String jwt) {
-    String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                                               @RequestParam String jwtToken) {
+    String username = jwtUtils.getUserNameFromJwtToken(jwtToken);
     User user = userService.findByUsername(username);
 
     if (userService.validate2FAcode(user.getUserId(), code)) {
