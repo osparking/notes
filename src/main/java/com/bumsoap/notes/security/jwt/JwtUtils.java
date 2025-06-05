@@ -36,16 +36,16 @@ public class JwtUtils {
     return null;
   }
 
-  public String generateTokenFromUsername(UserDetails details) {
+  public String generateTokenFromUsername(UserDetailsImpl details) {
     String roles = details.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.joining(","));
-    var detailsImpl = ((UserDetailsImpl)details);
     return Jwts.builder()
         .subject(details.getUsername())
         .claim("roles", roles)
-        .claim("signUpMethod", detailsImpl.getSignUpMethod())
-        .claim("loginMethod", detailsImpl.getLoginMethod())
+        .claim("signUpMethod", details.getSignUpMethod())
+        .claim("loginMethod", details.getLoginMethod())
+        .claim("is2faEnabled", details.is2faEnabled())
         .issuedAt(new Date())
         .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(key())
