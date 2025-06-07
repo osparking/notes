@@ -34,3 +34,4 @@ build/
 
 ### 박종범 ###
 ignore/
+.env.*
