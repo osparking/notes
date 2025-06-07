@@ -35,3 +35,4 @@ build/
 ### 박종범 ###
 ignore/
 .env
+.env.power_shell
