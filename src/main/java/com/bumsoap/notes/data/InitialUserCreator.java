@@ -40,7 +40,7 @@ public class InitialUserCreator implements ApplicationListener<ApplicationReadyE
       admin.setCredentialsExpiration(LocalDate.now().plusYears(1));
       admin.setAccountExpiration(LocalDate.now().plusYears(1));
       admin.setTwoFactorEnabled(false);
-      admin.setSignUpMethod("email");
+      admin.setSignUpMethod("유저네임");
       admin.setRole(adminRole);
       userRepo.save(admin);
     }
@@ -59,7 +59,7 @@ public class InitialUserCreator implements ApplicationListener<ApplicationReadyE
       user1.setCredentialsExpiration(LocalDate.now().plusYears(1));
       user1.setAccountExpiration(LocalDate.now().plusYears(1));
       user1.setTwoFactorEnabled(false);
-      user1.setSignUpMethod("email");
+      user1.setSignUpMethod("유저네임");
       user1.setRole(userRole);
       userRepo.save(user1);
     }
