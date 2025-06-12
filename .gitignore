@@ -36,3 +36,4 @@ build/
 ignore/
 .env
 .env.power_shell
+.env.gnu_bash
