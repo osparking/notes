@@ -42,7 +42,7 @@ public class OAuth2LoginSuccessHandler
   @Autowired
   RoleRepo roleRepository;
 
-  @Value("${frontend.url}")
+  @Value("${FRONTEND_URL}")
   private String frontendUrl;
 
   String username;
