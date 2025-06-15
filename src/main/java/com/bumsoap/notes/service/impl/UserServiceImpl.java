@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
   private final EmailService emailService;
   private final TotpService totpService;
 
-  @Value("${FRONTEND_URL}")
+  @Value("${frontend.url}")
   private String frontendUrl;
 
   @Override

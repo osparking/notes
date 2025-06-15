@@ -71,8 +71,8 @@ public class SecurityConfig {
             .oauth2Login(oauth -> {
                 oauth.successHandler(successHandler);
             });
-        http.csrf(csrf -> csrf.csrfTokenRepository(
-                CookieCsrfTokenRepository.withHttpOnlyFalse())
+        http.csrf(csrf -> csrf
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .ignoringRequestMatchers("/api/auth/public/**"));
         http.exceptionHandling(exception ->
             exception.authenticationEntryPoint(unauthorizedHandler));

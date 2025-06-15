@@ -2,6 +2,7 @@ package com.bumsoap.notes.cont;
 
 import com.bumsoap.notes.models.Note;
 import com.bumsoap.notes.service.NoteService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,10 @@ public class NoteCotroller {
 
     @PostMapping
     public Note createNote(@RequestBody String content,
+                           HttpServletRequest request,
                            @AuthenticationPrincipal UserDetails userDetails) {
+        String csrfToken = request.getHeader("X-XSRF-TOKEN");
+        System.out.println("csrfToken: " + csrfToken);
         String username = userDetails.getUsername();
         System.out.println("유저 상세:" + username);
         return noteService.createFor(username, content);
